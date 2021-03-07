@@ -1,0 +1,13 @@
+log:
+  level: "INFO"
+  fileName: "test.log"
+  maxSize: 10
+  maxAge: 30
+  maxBackups: 10
+  logType: "console"
+
+main:
+  port: 19000
+
+
+
