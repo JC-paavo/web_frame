@@ -20,17 +20,19 @@ func Init() {
 	engine.Use(logger.GinLogger(), logger.GinRecovery(true))
 
 	engine.GET("/hello", func(context *gin.Context) {
+		time.Sleep(5 * time.Second)
 		context.String(http.StatusOK, "hello world!")
 		return
 	})
 	//engine.Run(fmt.Sprintf(":%d", setting.Conf.MainConfig.Port))
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", setting.Conf.MainConfig.Port),
-		Handler: engine,
+		Addr:         fmt.Sprintf(":%d", setting.Conf.MainConfig.Port),
+		Handler:      engine,
+		WriteTimeout: 10 * time.Second,
 	}
 	go func() {
 		err := srv.ListenAndServe()
-		if err != nil {
+		if err != nil && err != http.ErrServerClosed {
 			panic(err.Error())
 		}
 	}()
@@ -39,15 +41,17 @@ func Init() {
 
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 
-	timeout, cancelFunc := context.WithTimeout(context.Background(), time.Second*5)
+	<-sig
+
+	ctx, cancelFunc := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancelFunc()
-	for {
-		<-sig
-		err := srv.Shutdown(timeout)
-		if err != nil {
-			zap.L().Error("shutdown error...",
-				zap.String("err", err.Error()),
-			)
-		}
+
+	fmt.Println("shutdown server ...")
+	err := srv.Shutdown(ctx)
+	if err != nil {
+		zap.L().Error("server error...",
+			zap.String("err", err.Error()),
+		)
 	}
+
 }
