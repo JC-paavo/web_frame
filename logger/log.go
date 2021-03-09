@@ -23,13 +23,19 @@ var lg *zap.Logger
 func Init(cfg *setting.LogConfig) (err error) {
 	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge, cfg.LogType)
 	encoder := getEncoder()
+
+	//配置日志级别
 	var l = new(zapcore.Level)
+
 	err = l.UnmarshalText([]byte(cfg.Level))
 	if err != nil {
 		return
 	}
+
+	//新建日志核心
 	core := zapcore.NewCore(encoder, writeSyncer, l)
 
+	//新建日志对象，并替换全局日志
 	lg = zap.New(core, zap.AddCaller())
 	zap.ReplaceGlobals(lg) // 替换zap包中全局的logger实例，后续在其他包中只需使用zap.L()调用即可
 	return

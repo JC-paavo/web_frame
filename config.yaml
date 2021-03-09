@@ -1,5 +1,5 @@
 log:
-  level: "INFO"
+  level: "ERROR"
   fileName: "test.log"
   maxSize: 10
   maxAge: 30
@@ -8,6 +8,23 @@ log:
 
 main:
   port: 19000
+
+mysql:
+  user: "root"
+  password: "dreamtechIT2017"
+  host: "10.81.69.77"
+  port: 3306
+  db: "sql_test"
+  otherOptions: "charset=utf8mb4&parseTime=True"
+  maxOpenConns: 20
+  maxIdleConns: 10
+
+redis:
+  password: "TA6sMiuSRqtTrHB7Amdg"
+  host: "10.81.69.77:32584"
+  cluster: false
+  db: 1
+  poolSize: 20
 
 
 
