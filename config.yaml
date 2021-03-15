@@ -1,5 +1,6 @@
 log:
-  level: "ERROR"
+  level: "INFO"
+
   fileName: "test.log"
   maxSize: 10
   maxAge: 30
@@ -7,6 +8,7 @@ log:
   logType: "console"
 
 main:
+  mode: "debug"
   port: 19000
 
 mysql:

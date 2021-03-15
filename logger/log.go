@@ -20,9 +20,9 @@ import (
 var lg *zap.Logger
 
 // InitLogger 初始化Logger
-func Init(cfg *setting.LogConfig) (err error) {
+func Init(cfg *setting.LogConfig, mode string) (err error) {
 	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge, cfg.LogType)
-	encoder := getEncoder()
+	encoder := getEncoder(mode)
 
 	//配置日志级别
 	var l = new(zapcore.Level)
@@ -41,13 +41,21 @@ func Init(cfg *setting.LogConfig) (err error) {
 	return
 }
 
-func getEncoder() zapcore.Encoder {
+func getEncoder(mode string) zapcore.Encoder {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	encoderConfig.TimeKey = "time"
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	encoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
 	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
+	switch mode {
+	case "debug":
+		return zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
+	case "release":
+		return zapcore.NewJSONEncoder(encoderConfig)
+	case "test":
+		return zapcore.NewJSONEncoder(encoderConfig)
+	}
 	return zapcore.NewJSONEncoder(encoderConfig)
 }
 

@@ -13,7 +13,7 @@ func main() {
 	setting.Init()
 
 	//初始化日志
-	err := logger.Init(setting.Conf.LogConfig)
+	err := logger.Init(setting.Conf.LogConfig, setting.Conf.Mode)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -29,6 +29,6 @@ func main() {
 	//初始化数据
 	mysql.Init(setting.Conf.MysqlConfig)
 
-	router.Init()
+	router.Init(setting.Conf.MainConfig)
 
 }
