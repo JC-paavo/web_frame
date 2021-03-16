@@ -1,6 +1,5 @@
 log:
   level: "INFO"
-
   fileName: "test.log"
   maxSize: 10
   maxAge: 30
@@ -8,8 +7,10 @@ log:
   logType: "console"
 
 main:
-  mode: "debug"
+  mode: "release"
   port: 19000
+  address: "127.0.0.1"
+  context: "/api/v1"
 
 mysql:
   user: "root"

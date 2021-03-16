@@ -29,6 +29,6 @@ func main() {
 	//初始化数据
 	mysql.Init(setting.Conf.MysqlConfig)
 
-	router.Init(setting.Conf.MainConfig)
+	router.Init(setting.Conf.MainConfig, setting.Conf.Mode)
 
 }

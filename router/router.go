@@ -17,8 +17,18 @@ import (
 	"go.uber.org/zap"
 )
 
-func Init(cfg *setting.MainConfig) {
-	gin.SetMode(cfg.Mode)
+func Init(cfg *setting.MainConfig, mode string) {
+
+	switch mode {
+	case gin.DebugMode:
+		gin.SetMode(gin.DebugMode)
+	case gin.ReleaseMode:
+		gin.SetMode(gin.ReleaseMode)
+	case gin.TestMode:
+		gin.SetMode(gin.TestMode)
+	default:
+		gin.SetMode(gin.DebugMode)
+	}
 	if err := validor_translator.InitTrans("zh"); err != nil {
 		zap.L().Error("初始化参数翻译故障!", zap.String("err", err.Error()))
 	}
@@ -26,17 +36,18 @@ func Init(cfg *setting.MainConfig) {
 	engine := gin.New()
 	engine.Use(logger.GinLogger(), logger.GinRecovery(true))
 
-	engine.GET("/hello", func(context *gin.Context) {
+	group := engine.Group(cfg.Context)
+	group.GET("/hello", func(context *gin.Context) {
 		time.Sleep(5 * time.Second)
 		context.String(http.StatusOK, "hello world!")
 		return
 	})
 
-	engine.POST("/signup", controller.SignUpHandler)
+	group.POST("/signup", controller.SignUpHandler)
 
 	//engine.Run(fmt.Sprintf(":%d", setting.Conf.MainConfig.Port))
 	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%d", cfg.Port),
+		Addr:         fmt.Sprintf("%s:%d", cfg.Addr, cfg.Port),
 		Handler:      engine,
 		WriteTimeout: 10 * time.Second,
 	}

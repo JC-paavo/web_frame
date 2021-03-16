@@ -16,8 +16,10 @@ type LogConfig struct {
 }
 
 type MainConfig struct {
-	Port int    `mapstructure:"port"`
-	Mode string `mapstucture:"mode"`
+	Port    int    `mapstructure:"port"`
+	Mode    string `mapstucture:"mode"`
+	Addr    string `mapstructure:"address"`
+	Context string `mapstructure:"context"`
 }
 
 type MysqlConfig struct {

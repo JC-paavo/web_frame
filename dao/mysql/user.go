@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	md52 "crypto/md5"
+	"fmt"
 	"web_frame/modules"
 
 	"golang.org/x/crypto/bcrypt"
@@ -20,6 +22,11 @@ func CheckUserExits(name string) bool {
 
 //InserUser：插入一个新用户
 func InserUser(user *modules.User) (err error) {
+
+	md5 := md52.New()
+	md5.Write([]byte("paavo"))
+	sum := md5.Sum([]byte("12345"))
+	fmt.Println(string(sum))
 	sql := "insert into t_user(user_id,username,password,email) values(?,?,?,?)"
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
