@@ -44,6 +44,7 @@ func Init(cfg *setting.MainConfig, mode string) {
 	})
 
 	group.POST("/signup", controller.SignUpHandler)
+	group.POST("/signin", controller.SignInHandler)
 
 	//engine.Run(fmt.Sprintf(":%d", setting.Conf.MainConfig.Port))
 	srv := &http.Server{

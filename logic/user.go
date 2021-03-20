@@ -14,10 +14,26 @@ func SignUp(p *modules.ParamSignUp) (err error) {
 	}
 	id := snowflake.GenId()
 	user := &modules.User{
-		UserId:      id.Int64(),
-		ParamSignUp: p,
+		UserId:   id.Int64(),
+		UserName: p.UserName,
+		Email:    p.Email,
+		Password: p.Password,
 	}
 	err = mysql.InserUser(user)
+	if err != nil {
+		return err
+	}
+
+	return
+}
+
+func SignIn(p *modules.ParamSignIn) (err error) {
+	user := &modules.User{
+		UserName: p.UserName,
+		Password: p.Password,
+	}
+	err = mysql.SignInUser(user)
+
 	if err != nil {
 		return err
 	}

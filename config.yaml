@@ -7,7 +7,7 @@ log:
   logType: "console"
 
 main:
-  mode: "release"
+  mode: "debug"
   port: 19000
   address: "127.0.0.1"
   context: "/api/v1"
