@@ -68,7 +68,7 @@ func SignInHandler(c *gin.Context) {
 		}
 	}
 	//业务处理
-	err = logic.SignIn(&p)
+	in, err := logic.SignIn(&p)
 
 	if err != nil {
 		zap.L().Error("login failed", zap.Error(err))
@@ -76,7 +76,7 @@ func SignInHandler(c *gin.Context) {
 		//c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	} else {
-		ResponseSuccess(c, nil)
+		ResponseSuccess(c, in)
 		//c.JSON(http.StatusOK, "Successful!")
 		return
 	}

@@ -23,6 +23,16 @@ func CheckUserExits(name string) bool {
 	return count > 0
 }
 
+//CheckUserIdExists
+func CheckUserIdExists(id int64) bool {
+	sql := "select count(1) from t_user where user_id=?"
+	var count int
+	if err := db.Get(&count, sql, id); err != nil {
+		zap.L().Error("CheckUserExits func error", zap.Error(err))
+	}
+	return count > 0
+}
+
 //InserUser：插入一个新用户
 func InserUser(user *modules.User) (err error) {
 
@@ -52,7 +62,7 @@ func SignInUser(login *modules.User) (err error) {
 	if err != nil {
 		return err
 	}
-	if err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(oldPassword)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(login.Password), []byte(oldPassword)); err != nil {
 		return err
 	}
 	return err

@@ -37,8 +37,8 @@ func Init(cfg *setting.MainConfig, mode string) {
 	engine.Use(logger.GinLogger(), logger.GinRecovery(true))
 
 	group := engine.Group(cfg.Context)
-	group.GET("/hello", func(context *gin.Context) {
-		time.Sleep(5 * time.Second)
+	group.GET("/hello", controller.AuthTokenMiddler(), func(context *gin.Context) {
+		//time.Sleep(5 * time.Second)
 		context.String(http.StatusOK, "hello world!")
 		return
 	})
